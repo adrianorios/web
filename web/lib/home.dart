@@ -21,21 +21,23 @@ class _HomeState extends State<Home> {
       "Accept": "application/json",
     });
     setState(() {
-      _resultado = response.body;
-      var document = parse(_resultado);
+      var document = parse(response.body);
 
       var cards = document.getElementsByClassName('card');
 
       for (var card in cards) {
         var cardTitle = card.getElementsByClassName('card-title');
         for (var title in cardTitle) {
-          print(title.text);
+          print(title.text); // aqui o nome do produto
+          _resultado = title.text;
         }
 
         var tbValor25 = card.getElementsByClassName('tb-valor-25');
         for (var valor in tbValor25) {
-          print(valor.text.trim());
+          print(valor.text.trim()); // aqui o valor
         }
+
+        // ai é só mandar esses valores pro widget que vai exibir
       }
     });
   }
