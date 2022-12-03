@@ -17,27 +17,30 @@ class _HomeState extends State<Home> {
   _recuperarCasos() async {
     String url =
         "https://buscapreco.sefaz.am.gov.br/item/grupo/page/1?termoCdGtin=&descricaoProd=${_produtoController.text}&action=";
-    http.Response response = await http.post(Uri.parse(url), headers: {
-      "Accept": "application/json",
-    });
+    http.Response response = await http.post(
+      Uri.parse(url),
+      headers: {
+        "Accept": "application/json",
+      },
+    );
     setState(() {
       var document = parse(response.body);
+      print(parse(response.body));
 
       var cards = document.getElementsByClassName('card');
 
       for (var card in cards) {
         var cardTitle = card.getElementsByClassName('card-title');
         for (var title in cardTitle) {
-          print(title.text); // aqui o nome do produto
+          print(title.text);
+
           _resultado = title.text;
         }
 
         var tbValor25 = card.getElementsByClassName('tb-valor-25');
         for (var valor in tbValor25) {
-          print(valor.text.trim()); // aqui o valor
+          print(valor.text.trim());
         }
-
-        // ai é só mandar esses valores pro widget que vai exibir
       }
     });
   }
@@ -45,14 +48,13 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Consumo de Serviços Web'),
-      ),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.all(40),
-          child: Column(
-            children: [
+        appBar: AppBar(
+          title: const Text('Consumo de Serviços Web'),
+        ),
+        body: SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.all(40),
+            child: Column(children: [
               TextField(
                 controller: _produtoController,
                 decoration: const InputDecoration(
@@ -69,11 +71,8 @@ class _HomeState extends State<Home> {
                   child: const Text('Clique aqui'),
                 ),
               ),
-              Text(_resultado),
-            ],
+            ]),
           ),
-        ),
-      ),
-    );
+        ));
   }
 }
