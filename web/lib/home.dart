@@ -51,10 +51,10 @@ class _HomeState extends State<Home> {
         appBar: AppBar(
           title: const Text('Consumo de Serviços Web'),
         ),
-        body: SingleChildScrollView(
-          child: Container(
-            padding: const EdgeInsets.all(40),
-            child: Column(children: [
+        body: Container(
+          padding: const EdgeInsets.all(40),
+          child: Column(
+            children: [
               TextField(
                 controller: _produtoController,
                 decoration: const InputDecoration(
@@ -71,7 +71,7 @@ class _HomeState extends State<Home> {
                   child: const Text('Clique aqui'),
                 ),
               ),
-            ]),
+            ],
           ),
         ));
   }
