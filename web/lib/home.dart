@@ -49,30 +49,40 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Consumo de Serviços Web'),
+          title: const Text('Consumo de + Web'),
         ),
-        body: Container(
-          padding: const EdgeInsets.all(40),
-          child: Column(
-            children: [
-              TextField(
-                controller: _produtoController,
-                decoration: const InputDecoration(
-                  labelText: 'Digite o nome do produto',
-                ),
-                style: const TextStyle(fontSize: 14),
+        body: Column(
+          children: [
+            TextField(
+              controller: _produtoController,
+              decoration: const InputDecoration(
+                labelText: 'Digite o nome do produto',
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 20),
-                child: ElevatedButton(
-                  onPressed: () {
-                    _recuperarCasos();
-                  },
-                  child: const Text('Clique aqui'),
-                ),
+              style: const TextStyle(fontSize: 14),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 20),
+              child: ElevatedButton(
+                onPressed: () {
+                  _recuperarCasos();
+                },
+                child: const Text('Clique aqui'),
               ),
-            ],
-          ),
+            ),
+            Expanded(
+              child: ListView.builder(
+                  itemCount: _resultado.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return ListTile(
+                        leading: const Icon(Icons.list),
+                        trailing: const Text(
+                          "GFG",
+                          style: TextStyle(color: Colors.green, fontSize: 15),
+                        ),
+                        title: Text(_resultado));
+                  }),
+            ),
+          ],
         ));
   }
 }
