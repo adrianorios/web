@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'package:html/parser.dart' show parse;
 
 class Home extends StatefulWidget {
@@ -18,7 +17,8 @@ class _HomeState extends State<Home> {
 
   _recuperarCasos() async {
     String url =
-        "https://buscapreco.sefaz.am.gov.br/item/grupo/page/1?termoCdGtin=&descricaoProd=${_produtoController.text}&action=";
+        "https://buscapreco.sefaz.am.gov.br/item/grupo/page/1?termoCdGtin=&descricaoProd=${_produtoController.text}&action=&consultaExata=true&_consultaExata=on";
+
     http.Response response = await http.post(
       Uri.parse(url),
     );
@@ -82,10 +82,12 @@ class _HomeState extends State<Home> {
             Text(_item.length.toString()),
             Expanded(
               child: ListView.builder(
-                shrinkWrap: true,
                 itemCount: _item.length,
-                itemBuilder: (BuildContext context, int index) {
+                itemBuilder: (context, index) {
                   return ListTile(
+                    onTap: () {
+                      print("Item $_item clicado");
+                    },
                     leading: const Icon(CupertinoIcons.zzz),
                     trailing: Text(_valor.trim()),
                     title: Text(
