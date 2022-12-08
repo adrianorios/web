@@ -83,13 +83,16 @@ class _HomeState extends State<Home> {
             Expanded(
               child: ListView.builder(
                 shrinkWrap: true,
-                itemCount: _item == null ? 0 : _item.length,
+                itemCount: _item.length,
                 itemBuilder: (BuildContext context, int index) {
                   return ListTile(
                     leading: const Icon(CupertinoIcons.zzz),
                     trailing: Text(_valor.trim()),
-                    title: Text(_item.trim()),
-                    subtitle: Text("Mat"),
+                    title: Text(
+                      _item.trim(),
+                      style:
+                          TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+                    ),
                   );
                 },
               ),
