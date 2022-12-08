@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -11,7 +12,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  String _resultado = 'resultado';
+  String _item = '';
+  String _valor = '';
   final TextEditingController _produtoController = TextEditingController();
 
   _recuperarCasos() async {
@@ -19,30 +21,37 @@ class _HomeState extends State<Home> {
         "https://buscapreco.sefaz.am.gov.br/item/grupo/page/1?termoCdGtin=&descricaoProd=${_produtoController.text}&action=";
     http.Response response = await http.post(
       Uri.parse(url),
-      headers: {
-        "Accept": "application/json",
-      },
     );
-    setState(() {
-      var document = parse(response.body);
-      print(parse(response.body));
+    var document = parse(response.body);
+    var cards = document.getElementsByClassName('card');
+    for (var card in cards) {
+      var cardTitle = card.getElementsByClassName('card-title');
+      for (var title in cardTitle) {
+        print(title.text.trim());
 
-      var cards = document.getElementsByClassName('card');
-
-      for (var card in cards) {
+        var tbValor25 = card.getElementsByClassName('tb-valor-25');
+        for (var valor in tbValor25) {
+          setState(() {
+            _item = title.text.trim();
+            _valor = valor.text.trim();
+            /*for (var card in cards) {
         var cardTitle = card.getElementsByClassName('card-title');
         for (var title in cardTitle) {
           print(title.text);
 
-          _resultado = title.text;
+          _item = title.text;
         }
 
         var tbValor25 = card.getElementsByClassName('tb-valor-25');
         for (var valor in tbValor25) {
           print(valor.text.trim());
+          _valor = valor.text;
+        }
+      }*/
+          });
         }
       }
-    });
+    }
   }
 
   @override
@@ -69,18 +78,21 @@ class _HomeState extends State<Home> {
                 child: const Text('Clique aqui'),
               ),
             ),
+            const Text("Quantidade itens"),
+            Text(_item.length.toString()),
             Expanded(
               child: ListView.builder(
-                  itemCount: _resultado.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return ListTile(
-                        leading: const Icon(Icons.list),
-                        trailing: const Text(
-                          "GFG",
-                          style: TextStyle(color: Colors.green, fontSize: 15),
-                        ),
-                        title: Text(_resultado));
-                  }),
+                shrinkWrap: true,
+                itemCount: _item == null ? 0 : _item.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return ListTile(
+                    leading: const Icon(CupertinoIcons.zzz),
+                    trailing: Text(_valor.trim()),
+                    title: Text(_item.trim()),
+                    subtitle: Text("Mat"),
+                  );
+                },
+              ),
             ),
           ],
         ));
