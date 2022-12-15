@@ -11,8 +11,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  String _item = '';
-  String _valor = '';
+  final _produtos = [];
+
   final TextEditingController _produtoController = TextEditingController();
 
   _recuperarCasos() async {
@@ -27,27 +27,13 @@ class _HomeState extends State<Home> {
     for (var card in cards) {
       var cardTitle = card.getElementsByClassName('card-title');
       for (var title in cardTitle) {
-        print(title.text.trim());
-
         var tbValor25 = card.getElementsByClassName('tb-valor-25');
         for (var valor in tbValor25) {
           setState(() {
-            _item = title.text.trim();
-            _valor = valor.text.trim();
-            /*for (var card in cards) {
-        var cardTitle = card.getElementsByClassName('card-title');
-        for (var title in cardTitle) {
-          print(title.text);
-
-          _item = title.text;
-        }
-
-        var tbValor25 = card.getElementsByClassName('tb-valor-25');
-        for (var valor in tbValor25) {
-          print(valor.text.trim());
-          _valor = valor.text;
-        }
-      }*/
+            _produtos.add({
+              "item": title.text.trim(),
+              "valor": valor.text.trim(),
+            });
           });
         }
       }
@@ -79,21 +65,20 @@ class _HomeState extends State<Home> {
               ),
             ),
             const Text("Quantidade itens"),
-            Text(_item.length.toString()),
             Expanded(
               child: ListView.builder(
-                itemCount: _item.length,
+                itemCount: _produtos.length,
                 itemBuilder: (context, index) {
                   return ListTile(
                     onTap: () {
-                      print("Item $_item clicado");
+                      // print("Item $_item clicado");
                     },
                     leading: const Icon(CupertinoIcons.zzz),
-                    trailing: Text(_valor.trim()),
+                    trailing: Text(_produtos[index]['valor'].trim()),
                     title: Text(
-                      _item.trim(),
+                      _produtos[index]['item'].trim(),
                       style:
-                          TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+                          const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
                     ),
                   );
                 },
