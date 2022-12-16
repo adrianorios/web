@@ -40,6 +40,12 @@ class _HomeState extends State<Home> {
     }
   }
 
+  _limpar() {
+    setState(() {
+      _produtos.clear();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,11 +66,22 @@ class _HomeState extends State<Home> {
               child: ElevatedButton(
                 onPressed: () {
                   _recuperarCasos();
+                  _limpar();
                 },
                 child: const Text('Clique aqui'),
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.only(top: 20),
+              child: ElevatedButton(
+                onPressed: () {
+                  _limpar();
+                },
+                child: const Text('Limpar'),
+              ),
+            ),
             const Text("Quantidade itens"),
+            Text(_produtos.length.toString()),
             Expanded(
               child: ListView.builder(
                 itemCount: _produtos.length,
@@ -73,12 +90,11 @@ class _HomeState extends State<Home> {
                     onTap: () {
                       // print("Item $_item clicado");
                     },
-                    leading: const Icon(CupertinoIcons.zzz),
                     trailing: Text(_produtos[index]['valor'].trim()),
                     title: Text(
                       _produtos[index]['item'].trim(),
-                      style:
-                          const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                          fontSize: 10, fontWeight: FontWeight.bold),
                     ),
                   );
                 },
