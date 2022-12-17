@@ -48,18 +48,98 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: false,
+      appBar: AppBar(
+        actions: [
+          IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.info_rounded,
+                color: Color(0xFF4CAF50),
+              )),
+        ],
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
       backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Center(
-          child: Column(
-            children: [
-              Image.asset("assets/logo.png"),
-              Text(
-                "Começe a economizar agora!",
-                style: TextStyle(color: Colors.green, fontSize: 25),
-              )
-            ],
-          ),
+      body: Center(
+        child: Column(
+          children: [
+            Image.asset(
+              "assets/logo.png",
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 15, right: 15, left: 15),
+              child: Image.asset(
+                "assets/economizar.png",
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 20, right: 25, left: 25),
+              child: TextFormField(
+                controller: _produtoController,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.grey.withAlpha(50),
+                  isDense: true,
+                  hintText: "Digite o produto que deseja procurar",
+                  hintStyle:
+                      TextStyle(color: Colors.grey.shade400, fontSize: 14),
+                  prefixIcon: const Icon(
+                    Icons.search,
+                    color: Colors.black,
+                    size: 21,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(60),
+                    borderSide: const BorderSide(
+                      width: 0,
+                      style: BorderStyle.none,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const Padding(padding: EdgeInsets.only(top: 20)),
+            SizedBox(
+              height: 50,
+              width: 200,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF4CAF50),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18),
+                  ),
+                ),
+                onPressed: () {
+                  _recuperarCasos();
+                  _limpar();
+                },
+                child: const Text(
+                  "Pesquisar",
+                  style: TextStyle(fontSize: 18),
+                ),
+              ),
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: _produtos.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    onTap: () {
+                      // print("Item $_item clicado");
+                    },
+                    trailing: Text(_produtos[index]['valor'].trim()),
+                    title: Text(
+                      _produtos[index]['item'].trim(),
+                      style: const TextStyle(
+                          fontSize: 10, fontWeight: FontWeight.bold),
+                    ),
+                  );
+                },
+              ),
+            )
+          ],
         ),
       ),
     );
