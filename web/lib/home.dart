@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' show parse;
@@ -49,6 +48,33 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Center(
+          child: Column(
+            children: [
+              Image.asset("assets/logo.png"),
+              Text(
+                "Começe a economizar agora!",
+                style: TextStyle(color: Colors.green, fontSize: 25),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+    
+    
+    
+    
+    
+    
+    
+    
+    /*Scaffold(
         appBar: AppBar(
           title: const Text('Consumo de + Web'),
         ),
@@ -104,3 +130,4 @@ class _HomeState extends State<Home> {
         ));
   }
 }
+*/
