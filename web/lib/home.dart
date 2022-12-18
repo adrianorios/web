@@ -22,20 +22,32 @@ class _HomeState extends State<Home> {
     http.Response response = await http.post(Uri.parse(url));
 
     var document = parse(response.body);
-    print(_produtos.length);
 
     var cards = document.getElementsByClassName('card');
     for (var card in cards) {
       var cardTitle = card.getElementsByClassName('card-title');
       for (var title in cardTitle) {
-        var tbValor25 = card.getElementsByClassName('tb-valor-25');
-        for (var valor in tbValor25) {
-          setState(() {
-            _produtos.add({
-              "item": title.text.trim(),
-              "valor": valor.text.trim(),
-            });
-          });
+        var tbValor25 = card.getElementsByClassName(
+            'tb-valor-25 indigo-text text-darken-4 padding10');
+        var tbValor10 = card.getElementsByClassName(
+            'truncate grey-text text-darken-4 tb-valor-10 tooltipped');
+        var tbValorloja =
+            card.getElementsByClassName('truncate tooltipped padding10');
+        for (var loja in tbValorloja) {
+          for (var valor in tbValor25) {
+            for (var endereco in tbValor10) {
+              setState(
+                () {
+                  _produtos.add({
+                    "item": title.text.trim(),
+                    "valor": valor.text.trim(),
+                    "endereco": endereco.text.trim(),
+                    "loja": loja.text.trim(),
+                  });
+                },
+              );
+            }
+          }
         }
       }
     }
@@ -139,19 +151,34 @@ class _HomeState extends State<Home> {
                           : ListView.builder(
                               itemCount: _produtos.length,
                               itemBuilder: (context, index) {
-                                return Card(
-                                  color: const Color(0xFF4CAF50).withAlpha(150),
-                                  child: ListTile(
-                                    onTap: () {},
-                                    trailing: Text(
-                                      _produtos[index]['valor'].trim(),
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    title: Text(
-                                      _produtos[index]['item'].trim(),
-                                      style: const TextStyle(
-                                        fontSize: 12,
+                                return Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 10, right: 10),
+                                  child: Card(
+                                    color: const Color(0xFF4CAF50),
+                                    child: ListTile(
+                                      isThreeLine: true,
+                                      onTap: () {},
+                                      trailing: Text(
+                                        _produtos[index]['valor'].trim(),
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      title: Text(
+                                        _produtos[index]['item'].trim(),
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                      subtitle: Text(
+                                        "Endereço: " +
+                                            _produtos[index]['endereco']
+                                                .trim() +
+                                            " Loja: " +
+                                            _produtos[index]['loja'].toString(),
+                                        style: const TextStyle(
+                                          fontSize: 12,
+                                        ),
                                       ),
                                     ),
                                   ),
