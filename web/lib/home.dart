@@ -128,10 +128,9 @@ class _HomeState extends State<Home> {
                     ),
                     Expanded(
                       child: _produtos.length == 0
-                          // ignore: prefer_const_constructors
-                          ? SizedBox(
+                          ? const SizedBox(
                               width: 100,
-                              child: const LoadingIndicator(
+                              child: LoadingIndicator(
                                 indicatorType: Indicator.ballBeat,
                                 colors: [Color(0xFF4CAF50)],
                                 strokeWidth: 3,
