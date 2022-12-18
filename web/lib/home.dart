@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' show parse;
+import 'package:loading_indicator/loading_indicator.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -21,6 +22,7 @@ class _HomeState extends State<Home> {
     http.Response response = await http.post(Uri.parse(url));
 
     var document = parse(response.body);
+    print(_produtos.length);
 
     var cards = document.getElementsByClassName('card');
     for (var card in cards) {
@@ -125,29 +127,39 @@ class _HomeState extends State<Home> {
                       ),
                     ),
                     Expanded(
-                      child: ListView.builder(
-                        itemCount: _produtos.length,
-                        itemBuilder: (context, index) {
-                          return Card(
-                            color: const Color(0xFF4CAF50).withAlpha(150),
-                            child: ListTile(
-                              onTap: () {},
-                              trailing: Text(
-                                _produtos[index]['valor'].trim(),
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold),
+                      child: _produtos.length == 0
+                          // ignore: prefer_const_constructors
+                          ? SizedBox(
+                              width: 100,
+                              child: const LoadingIndicator(
+                                indicatorType: Indicator.ballBeat,
+                                colors: [Color(0xFF4CAF50)],
+                                strokeWidth: 3,
                               ),
-                              title: Text(
-                                _produtos[index]['item'].trim(),
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                ),
-                              ),
+                            )
+                          : ListView.builder(
+                              itemCount: _produtos.length,
+                              itemBuilder: (context, index) {
+                                return Card(
+                                  color: const Color(0xFF4CAF50).withAlpha(150),
+                                  child: ListTile(
+                                    onTap: () {},
+                                    trailing: Text(
+                                      _produtos[index]['valor'].trim(),
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    title: Text(
+                                      _produtos[index]['item'].trim(),
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
                             ),
-                          );
-                        },
-                      ),
-                    )
+                    ),
                   ],
                 ),
               ),
