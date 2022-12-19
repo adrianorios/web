@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' show parse;
 import 'package:loading_indicator/loading_indicator.dart';
+import 'package:web/detail.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -155,10 +156,19 @@ class _HomeState extends State<Home> {
                                   padding: const EdgeInsets.only(
                                       left: 10, right: 10),
                                   child: Card(
-                                    color: const Color(0xFF4CAF50),
                                     child: ListTile(
-                                      isThreeLine: true,
-                                      onTap: () {},
+                                      onTap: () {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    CardDetailsPage(
+                                                      _produtos[index]["item"],
+                                                      _produtos[index]
+                                                          ["endereco"],
+                                                      _produtos[index]["valor"],
+                                                      _produtos[index]["loja"],
+                                                    )));
+                                      },
                                       trailing: Text(
                                         _produtos[index]['valor'].trim(),
                                         style: const TextStyle(
@@ -168,16 +178,6 @@ class _HomeState extends State<Home> {
                                         _produtos[index]['item'].trim(),
                                         style: const TextStyle(
                                           fontSize: 14,
-                                        ),
-                                      ),
-                                      subtitle: Text(
-                                        "Endereço: " +
-                                            _produtos[index]['endereco']
-                                                .trim() +
-                                            " Loja: " +
-                                            _produtos[index]['loja'].toString(),
-                                        style: const TextStyle(
-                                          fontSize: 12,
                                         ),
                                       ),
                                     ),
