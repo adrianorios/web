@@ -11,13 +11,14 @@ class Api {
     http.Response response = await http.post(Uri.parse(url), headers: {
       // ignore: prefer_interpolation_to_compose_strings
       'Cookie': 'JSESSIONID=' + _cookie
-    }).catchError((onError) => print(onError));
-inspect(response.body);
+    });
+    inspect(response.body);
     var cookie = "";
-    if (response.headers['set-cookie'].toString().isNotEmpty && response.headers['set-cookie'].toString().length > 43) {
+    if (response.headers['set-cookie'].toString().isNotEmpty &&
+        response.headers['set-cookie'].toString().length > 43) {
       cookie = response.headers['set-cookie'].toString().substring(11, 43);
     }
-    
+
     var document = parse(response.body);
 
     var cards = document.getElementsByClassName('card');
@@ -46,10 +47,10 @@ inspect(response.body);
     }
 
     var paginacao = document.querySelectorAll('li.waves-effect');
-    paginacao.forEach((element) {
+    for (var element in paginacao) {
       var pagina = element.querySelector('a');
       paginas.add(pagina?.text);
-    });
+    }
 
     return [produtos, paginas, cookie];
   }

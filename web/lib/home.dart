@@ -15,42 +15,48 @@ class _HomeState extends State<Home> {
 
   final TextEditingController _produtoController = TextEditingController();
 
-  bool _exibirOBagulho = false;
-  var _paginas = [];
+  bool _exibirLoading = false;
+  final _paginas = [];
   String _cookie = "";
+  String _textoPag = "";
 
-  _recuperarCasos(pagina) async {
+  _pesquisarProd(pagina) async {
     setState(() {
-      _exibirOBagulho = true;
+      _exibirLoading = true;
+      _textoPag = "Páginas:";
     });
-    
+
     var meusProdutos = [];
     if (pagina == 0) {
-      meusProdutos = await Api.fetch("https://buscapreco.sefaz.am.gov.br/item/grupo/page/1?termoCdGtin=&descricaoProd=${_produtoController.text}&action=&consultaExata=true&_consultaExata=on", _cookie);
+      meusProdutos = await Api.fetch(
+          "https://buscapreco.sefaz.am.gov.br/item/grupo/page/1?termoCdGtin=&descricaoProd=${_produtoController.text}&action=&consultaExata=true&_consultaExata=on",
+          _cookie);
     } else {
-      meusProdutos = await Api.fetch("https://buscapreco.sefaz.am.gov.br/item/grupo/page/" + pagina, _cookie);
+      meusProdutos = await Api.fetch(
+          "https://buscapreco.sefaz.am.gov.br/item/grupo/page/$pagina",
+          _cookie);
     }
-    
+
     setState(() {
       _produtos.clear();
       _paginas.clear();
       _produtos.addAll(meusProdutos[0]);
       _paginas.addAll(meusProdutos[1]);
-      if (meusProdutos[2].isNotEmpty) { 
+      if (meusProdutos[2].isNotEmpty) {
         _cookie = meusProdutos[2];
       }
     });
-    
-    
 
     setState(() {
-      _exibirOBagulho = false;
+      _exibirLoading = false;
+      _textoPag = "Páginas:";
     });
   }
 
   _limpar() {
     setState(() {
       _produtos.clear();
+      _textoPag = "";
     });
   }
 
@@ -68,7 +74,7 @@ class _HomeState extends State<Home> {
             child: SingleChildScrollView(
               child: Column(children: [
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.9,
+                  height: MediaQuery.of(context).size.height,
                   width: MediaQuery.of(context).size.width,
                   child: Column(
                     children: [
@@ -77,16 +83,15 @@ class _HomeState extends State<Home> {
                         height: 200,
                       ),
                       Padding(
-                        padding:
-                            const EdgeInsets.only(top: 15, right: 15, left: 15),
+                        padding: const EdgeInsets.only(top: 10),
                         child: Image.asset(
                           "assets/economizar.png",
-                          height: 30,
+                          height: 25,
                         ),
                       ),
                       Padding(
                         padding:
-                            const EdgeInsets.only(top: 20, right: 25, left: 25),
+                            const EdgeInsets.only(top: 15, right: 15, left: 15),
                         child: TextFormField(
                           controller: _produtoController,
                           decoration: InputDecoration(
@@ -94,8 +99,8 @@ class _HomeState extends State<Home> {
                             fillColor: Colors.grey.withAlpha(50),
                             isDense: true,
                             hintText: "Digite o produto que deseja procurar",
-                            hintStyle: TextStyle(
-                                color: Colors.grey.shade200, fontSize: 14),
+                            hintStyle: const TextStyle(
+                                color: Colors.black54, fontSize: 14),
                             prefixIcon: const Icon(
                               Icons.search,
                               color: Colors.black,
@@ -112,13 +117,13 @@ class _HomeState extends State<Home> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(20.0),
+                        padding: const EdgeInsets.all(15.0),
                         child: SizedBox(
                           height: 50,
-                          width: 150,
+                          width: 200,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: _exibirOBagulho
+                              backgroundColor: _exibirLoading
                                   ? Colors.grey
                                   : const Color(0xFF4CAF50),
                               shape: RoundedRectangleBorder(
@@ -126,8 +131,8 @@ class _HomeState extends State<Home> {
                               ),
                             ),
                             onPressed: () {
-                              if (!_exibirOBagulho) {
-                                _recuperarCasos(0);
+                              if (!_exibirLoading) {
+                                _pesquisarProd(0);
                                 _limpar();
                               }
                             },
@@ -138,98 +143,104 @@ class _HomeState extends State<Home> {
                           ),
                         ),
                       ),
-                      Expanded(
-                        child: _exibirOBagulho == true
-                            ? const SizedBox(
-                                width: 100,
-                                child: LoadingIndicator(
-                                  indicatorType: Indicator.ballBeat,
-                                  colors: [Color(0xFF4CAF50)],
-                                  strokeWidth: 3,
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: Text(_textoPag),
+                      ),
+                      Visibility(
+                        visible: _produtos.isNotEmpty,
+                        child: SizedBox(
+                          height: 50,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: _paginas.length,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 8, right: 8, bottom: 10),
+                                child: SizedBox(
+                                  width: 50,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: _exibirLoading
+                                          ? Colors.grey
+                                          : const Color(0xFF4CAF50),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        _exibirLoading = true;
+                                        _pesquisarProd(
+                                            _paginas[index].toString());
+                                      });
+                                    },
+                                    child: Text(
+                                      _paginas[index].toString(),
+                                      style: const TextStyle(fontSize: 15),
+                                    ),
+                                  ),
                                 ),
-                              )
-                            : ListView.builder(
-                                itemCount: _produtos.length,
-                                itemBuilder: (context, index) {
-                                  return Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 10, right: 10),
-                                    child: Card(
-                                      child: ListTile(
-                                        onTap: () {
-                                          Navigator.of(context).push(
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                      _exibirLoading == true
+                          ? const SizedBox(
+                              width: 150,
+                              child: LoadingIndicator(
+                                indicatorType: Indicator.ballSpinFadeLoader,
+                                colors: [Color(0xFF4CAF50)],
+                                strokeWidth: 3,
+                              ),
+                            )
+                          : Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 8),
+                                child: ListView.builder(
+                                  itemCount: _produtos.length,
+                                  itemBuilder: (context, index) {
+                                    return Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 10, right: 10),
+                                      child: Card(
+                                        child: ListTile(
+                                          onTap: () {
+                                            Navigator.of(context).push(
                                               MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      CardDetailsPage(
-                                                        _produtos[index]
-                                                            ["item"],
-                                                        _produtos[index]
-                                                            ["endereco"],
-                                                        _produtos[index]
-                                                            ["valor"],
-                                                        _produtos[index]
-                                                            ["loja"],
-                                                      )));
-                                        },
-                                        trailing: Text(
-                                          _produtos[index]['valor'].trim(),
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        title: Text(
-                                          _produtos[index]['item'].trim(),
-                                          style: const TextStyle(
-                                            fontSize: 14,
+                                                builder: (context) =>
+                                                    CardDetailsPage(
+                                                  _produtos[index]["item"],
+                                                  _produtos[index]["endereco"],
+                                                  _produtos[index]["valor"],
+                                                  _produtos[index]["loja"],
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                          trailing: Text(
+                                            _produtos[index]['valor'].trim(),
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          title: Text(
+                                            _produtos[index]['item'].trim(),
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  );
-                                },
+                                    );
+                                  },
+                                ),
                               ),
-                      ),
+                            ),
                     ],
                   ),
                 ),
-                Visibility(
-                  visible: _produtos.isNotEmpty,
-                  child: SizedBox(
-                    height: 50,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: _paginas.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.only(left: 10, right: 10),
-                          child: SizedBox(
-                            height: 10,
-                            width: 40,
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: _exibirOBagulho
-                                    ? Colors.grey
-                                    : const Color(0xFF4CAF50),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(18),
-                                ),
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  _exibirOBagulho = true;
-                                  _recuperarCasos(_paginas[index].toString());
-                                });
-                              },
-                              child: Text(
-                                _paginas[index].toString(),
-                                style: const TextStyle(fontSize: 18),
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                )
               ]),
             ),
           ),
