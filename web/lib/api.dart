@@ -12,7 +12,6 @@ class Api {
       // ignore: prefer_interpolation_to_compose_strings
       'Cookie': 'JSESSIONID=' + _cookie
     });
-    inspect(response.body);
     var cookie = "";
     if (response.headers['set-cookie'].toString().isNotEmpty &&
         response.headers['set-cookie'].toString().length > 43) {
