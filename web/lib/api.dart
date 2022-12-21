@@ -12,7 +12,6 @@ class Api {
       // ignore: prefer_interpolation_to_compose_strings
       'Cookie': 'JSESSIONID=' + _cookie
     });
-    inspect(response.body);
     var cookie = "";
     if (response.headers['set-cookie'].toString().isNotEmpty &&
         response.headers['set-cookie'].toString().length > 43) {
@@ -51,6 +50,18 @@ class Api {
       var pagina = element.querySelector('a');
       paginas.add(pagina?.text);
     }
+
+    // selector pegar só a data
+    // document.querySelectorAll("div.card-content.principal > p.tb-valor-10")
+
+    // selector pegar todos os links de mapa
+    // var maps = document.querySelectorAll("a[data-tooltip='Localização da loja']")
+    /*
+      mapas.forEach(function(mapa) {
+          var onclick = mapa.getAttribute('onclick')
+          print(onclick.substring(0, onclick.length - 2).substring(23).trim())
+      })
+    */
 
     return [produtos, paginas, cookie];
   }

@@ -203,34 +203,30 @@ class _HomeState extends State<Home> {
                                 child: ListView.builder(
                                   itemCount: _produtos.length,
                                   itemBuilder: (context, index) {
-                                    return Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 10, right: 10),
-                                      child: Card(
-                                        child: ListTile(
-                                          onTap: () {
-                                            Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    CardDetailsPage(
-                                                  _produtos[index]["item"],
-                                                  _produtos[index]["endereco"],
-                                                  _produtos[index]["valor"],
-                                                  _produtos[index]["loja"],
-                                                ),
+                                    return Card(
+                                      child: ListTile(
+                                        onTap: () {
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  CardDetailsPage(
+                                                _produtos[index]["item"],
+                                                _produtos[index]["endereco"],
+                                                _produtos[index]["valor"],
+                                                _produtos[index]["loja"],
                                               ),
-                                            );
-                                          },
-                                          trailing: Text(
-                                            _produtos[index]['valor'].trim(),
-                                            style: const TextStyle(
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          title: Text(
-                                            _produtos[index]['item'].trim(),
-                                            style: const TextStyle(
-                                              fontSize: 14,
                                             ),
+                                          );
+                                        },
+                                        trailing: Text(
+                                          _produtos[index]['valor'].trim(),
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        title: Text(
+                                          _produtos[index]['item'].trim(),
+                                          style: const TextStyle(
+                                            fontSize: 14,
                                           ),
                                         ),
                                       ),
