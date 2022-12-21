@@ -80,6 +80,7 @@ class _HomeState extends State<Home> {
                     children: [
                       Image.asset(
                         "assets/logo.png",
+                        color: const Color(0xFF4CAF50),
                         height: 200,
                       ),
                       Padding(
