@@ -30,15 +30,20 @@ class Api {
             'truncate grey-text text-darken-4 tb-valor-10 tooltipped');
         var tbValorloja =
             card.getElementsByClassName('truncate tooltipped padding10');
-        for (var loja in tbValorloja) {
-          for (var valor in tbValor25) {
-            for (var endereco in tbValor10) {
-              produtos.add({
-                "item": title.text.trim(),
-                "valor": valor.text.trim(),
-                "endereco": endereco.text.trim(),
-                "loja": loja.text.trim(),
-              });
+        var tbData =
+            card.querySelectorAll("div.card-content.principal > p.tb-valor-10");
+        for (var data in tbData) {
+          for (var loja in tbValorloja) {
+            for (var valor in tbValor25) {
+              for (var endereco in tbValor10) {
+                produtos.add({
+                  "item": title.text.trim(),
+                  "valor": valor.text.trim(),
+                  "endereco": endereco.text.trim(),
+                  "loja": loja.text.trim(),
+                  "data": data.text.trim()
+                });
+              }
             }
           }
         }

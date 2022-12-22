@@ -229,6 +229,12 @@ class _HomeState extends State<Home> {
                                             fontSize: 14,
                                           ),
                                         ),
+                                        subtitle: Text(
+                                          _produtos[index]['data'].trim(),
+                                          style: const TextStyle(
+                                            fontSize: 12,
+                                          ),
+                                        ),
                                       ),
                                     );
                                   },
